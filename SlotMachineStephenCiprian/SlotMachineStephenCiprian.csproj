@@ -67,6 +67,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\audio\jackpot_audio.wav" />
+    <Content Include="assets\audio\slot_machine_beep_buzz.wav" />
     <Content Include="assets\images\background.png" />
     <Content Include="assets\images\bet_max_button.png" />
     <Content Include="assets\images\bet_one_button.png" />
@@ -96,7 +98,6 @@
     <TypeScriptCompile Include="Scripts\lib\tweenjs.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="assets\audio\" />
     <Folder Include="assets\fonts\" />
   </ItemGroup>
   <PropertyGroup>

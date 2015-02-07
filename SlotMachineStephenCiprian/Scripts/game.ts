@@ -21,13 +21,9 @@ var jackpotText: createjs.Text;
 var playerMoney = 1000;
 var winnings = 0;
 var jackpot = 5000;
-var turn = 0;
 var playerBet = 0;
-var winNumber = 0;
-var lossNumber = 0;
 var spinResult;
 var fruits = "";
-var winRatio = 0;
 var grapes = 0;
 var bananas = 0;
 var oranges = 0;
@@ -37,13 +33,13 @@ var bells = 0;
 var sevens = 0;
 var blanks = 0;
 
+
 function init() {
     canvas = document.getElementById("canvas");
     stage = new createjs.Stage(canvas);
     stage.enableMouseOver(20); // Enable mouse events
     createjs.Ticker.setFPS(60); // 60 frames per second
     createjs.Ticker.addEventListener("tick", gameLoop);
-
     main();
 }
 
@@ -51,47 +47,34 @@ function gameLoop() {
     stage.update(); // Refreshes our stage
 }
 
+
 // Event handlers ###################################################3
 function spinButtonClick() {
-    if (playerMoney == 0) {
+     if (playerMoney == 0) {
         if (confirm("You ran out of Money! \nDo you want to play again?")) {
             resetAll();
         }
-    }
-    else if (playerBet > playerMoney) {
-        alert("You don't have enough Money to place that bet.");
-    }
-    else if (playerBet < 0) {
-        alert("All bets must be a positive $ amount.");
     }
     else if (playerBet <= playerMoney) {
         spinResult = Reels();
         fruits = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
         determineWinnings();
-        turn++;
-    }
-    else {
-        alert("Please enter a valid bet amount");
     }
     creditsText.text = playerMoney;
 }
 function maxBetButtonClick() {
-    console.log("a button was clicked");
     playerBet = 100;
     betText.text = playerBet;
 }
 function betOneButtonClick() {
-    console.log("a button was clicked");
     playerBet = 1;
     betText.text = playerBet;
 }
 function betTenButtonClick() {
-    console.log("a button was clicked");
     playerBet = 10;
     betText.text = playerBet;
 }
 function powerButtonClick() {
-    console.log("a button was clicked");
 }
 function resetButtonClick() {
     resetFruitTally();
@@ -116,11 +99,11 @@ function resetAll() {
     playerMoney = 1000;
     winnings = 0;
     jackpot = 5000;
-    turn = 0;
     playerBet = 0;
-    winNumber = 0;
-    lossNumber = 0;
-    winRatio = 0;
+    jackpotText.text = jackpot;
+    betText.text = playerBet;
+    winText.text = winnings;
+    creditsText.text = playerMoney;
 }
 function checkJackPot() {
     /* compare two random values */
@@ -137,13 +120,11 @@ function showWinMessage() {
     playerMoney += winnings;
     resetFruitTally();
     checkJackPot();
-    alert("you win " + winnings + " becasue you bet " + playerBet);
     winText.text = winnings;
 }
 /* Utility function to show a loss message and reduce player money */
 function showLossMessage() {
     playerMoney -= playerBet;
-    alert("You Lost");
     resetFruitTally();
 }
 /* Utility function to check if a value falls within a range of bounds */
@@ -253,11 +234,9 @@ function determineWinnings() {
         else {
             winnings = playerBet * 1;
         }
-        winNumber++;
         showWinMessage();
     }
     else {
-        lossNumber++;
         showLossMessage();
     }
 
