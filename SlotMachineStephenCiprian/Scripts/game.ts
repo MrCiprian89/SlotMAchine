@@ -11,6 +11,12 @@ var betOneButton: createjs.Bitmap;
 var powerButton: createjs.Bitmap;
 var resetButton: createjs.Bitmap;
 
+var creditsText: createjs.Text;
+var betText: createjs.Text;
+var winText: createjs.Text;
+var jackpotText: createjs.Text;
+
+
 //Game Variables
 var playerMoney = 1000;
 var winnings = 0;
@@ -47,8 +53,6 @@ function gameLoop() {
 
 // Event handlers ###################################################3
 function spinButtonClick() {
-    console.log("a button was clicked");
-
     if (playerMoney == 0) {
         if (confirm("You ran out of Money! \nDo you want to play again?")) {
             resetAll();
@@ -69,21 +73,25 @@ function spinButtonClick() {
     else {
         alert("Please enter a valid bet amount");
     }
+    creditsText.text = playerMoney;
 }
 function maxBetButtonClick() {
     console.log("a button was clicked");
+    playerBet = 100;
+    betText.text = playerBet;
 }
 function betOneButtonClick() {
     console.log("a button was clicked");
     playerBet = 1;
+    betText.text = playerBet;
 }
 function betTenButtonClick() {
     console.log("a button was clicked");
     playerBet = 10;
+    betText.text = playerBet;
 }
 function powerButtonClick() {
     console.log("a button was clicked");
-    playerBet = 100;
 }
 function resetButtonClick() {
     resetFruitTally();
@@ -130,6 +138,7 @@ function showWinMessage() {
     resetFruitTally();
     checkJackPot();
     alert("you win " + winnings + " becasue you bet " + playerBet);
+    winText.text = winnings;
 }
 /* Utility function to show a loss message and reduce player money */
 function showLossMessage() {
@@ -295,6 +304,30 @@ function createUI() {
     resetButton.x = 76.5;
     resetButton.y = 338.5;
     resetButton.addEventListener("click", resetButtonClick);
+    //create winnings paid label
+    winText = new createjs.Text(winnings, "20px Arial", "#ff7700");
+    game.addChild(winText);
+    winText.x = 229;
+    winText.y = 275.5;
+    winText.textBaseline = "alphabetic";
+    //create bet amount label
+    betText = new createjs.Text(playerBet, "20px Arial", "#ff7700");
+    game.addChild(betText);
+    betText.x = 177;
+    betText.y = 275.5;
+    betText.textBaseline = "alphabetic";
+    //create credit balance label
+    creditsText = new createjs.Text(playerMoney, "20px Arial", "#ff7700");
+    game.addChild(creditsText);
+    creditsText.x = 47;
+    creditsText.y = 275.5;
+    creditsText.textBaseline = "alphabetic";
+    //create jackpot amount label
+    jackpotText = new createjs.Text(jackpot, "20px Arial", "#ff7700");
+    game.addChild(jackpotText);
+    jackpotText.x = 147.5;
+    jackpotText.y = 75;
+    jackpotText.textBaseline = "alphabetic";
 }
 
 // Our Game Kicks off in here
