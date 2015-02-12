@@ -11,6 +11,8 @@ var betOneButton: createjs.Bitmap;
 var powerButton: createjs.Bitmap;
 var resetButton: createjs.Bitmap;
 
+var blankReel: createjs.Bitmap;
+
 var creditsText: createjs.Text;
 var betText: createjs.Text;
 var winText: createjs.Text;
@@ -59,20 +61,21 @@ function spinButtonClick() {
         spinResult = Reels();
         fruits = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
         determineWinnings();
+        showReelOutcome(spinResult);
     }
-    creditsText.text = playerMoney;
+    creditsText.text = ""+playerMoney;
 }
 function maxBetButtonClick() {
     playerBet = 100;
-    betText.text = playerBet;
+    betText.text = "" +playerBet;
 }
 function betOneButtonClick() {
     playerBet = 1;
-    betText.text = playerBet;
+    betText.text = "" +playerBet;
 }
 function betTenButtonClick() {
     playerBet = 10;
-    betText.text = playerBet;
+    betText.text = "" +playerBet;
 }
 function powerButtonClick() {
 }
@@ -100,10 +103,10 @@ function resetAll() {
     winnings = 0;
     jackpot = 5000;
     playerBet = 0;
-    jackpotText.text = jackpot;
-    betText.text = playerBet;
-    winText.text = winnings;
-    creditsText.text = playerMoney;
+    jackpotText.text = "" +jackpot;
+    betText.text = "" +playerBet;
+    winText.text = "" +winnings;
+    creditsText.text = "" +playerMoney;
 }
 function checkJackPot() {
     /* compare two random values */
@@ -113,6 +116,7 @@ function checkJackPot() {
         alert("You Won the $" + jackpot + " Jackpot!!");
         playerMoney += jackpot;
         jackpot = 1000;
+        jackpotText.text = "" + jackpot;
     }
 }
 /* Utility function to show a win message and increase player money */
@@ -120,7 +124,7 @@ function showWinMessage() {
     playerMoney += winnings;
     resetFruitTally();
     checkJackPot();
-    winText.text = winnings;
+    winText.text = "" +winnings;
 }
 /* Utility function to show a loss message and reduce player money */
 function showLossMessage() {
@@ -182,6 +186,35 @@ function Reels() {
     }
     return betLine;
 }
+
+function showReelOutcome(fruit) {
+    for (var reel = 0; reel < 3; reel++) {
+        switch (fruit[reel]) {
+            case "blank":
+                  blankReel = new createjs.Bitmap("assets/images/blue.png");
+                    game.addChild(blankReel);
+                    blankReel.x = 49.7;
+                    blankReel.y = 124;
+                break;
+            case "Grapes":
+                break;
+            case "Banana":
+                break;
+            case  "Orange":
+                break;
+            case "Cherry":
+                break;
+            case "Bar":
+                break;
+            case "Bell":
+                break;
+            case "Seven":
+                break;
+        }
+
+    }
+}
+
 
 /* This function calculates the player's winnings, if any */
 function determineWinnings() {
@@ -284,25 +317,25 @@ function createUI() {
     resetButton.y = 338.5;
     resetButton.addEventListener("click", resetButtonClick);
     //create winnings paid label
-    winText = new createjs.Text(winnings, "20px Arial", "#ff7700");
+    winText = new createjs.Text("" +winnings, "20px Arial", "#ff7700");
     game.addChild(winText);
     winText.x = 229;
     winText.y = 275.5;
     winText.textBaseline = "alphabetic";
     //create bet amount label
-    betText = new createjs.Text(playerBet, "20px Arial", "#ff7700");
+    betText = new createjs.Text("" +playerBet, "20px Arial", "#ff7700");
     game.addChild(betText);
     betText.x = 177;
     betText.y = 275.5;
     betText.textBaseline = "alphabetic";
     //create credit balance label
-    creditsText = new createjs.Text(playerMoney, "20px Arial", "#ff7700");
+    creditsText = new createjs.Text("" +playerMoney, "20px Arial", "#ff7700");
     game.addChild(creditsText);
     creditsText.x = 47;
     creditsText.y = 275.5;
     creditsText.textBaseline = "alphabetic";
     //create jackpot amount label
-    jackpotText = new createjs.Text(jackpot, "20px Arial", "#ff7700");
+    jackpotText = new createjs.Text("" +jackpot, "20px Arial", "#ff7700");
     game.addChild(jackpotText);
     jackpotText.x = 147.5;
     jackpotText.y = 75;

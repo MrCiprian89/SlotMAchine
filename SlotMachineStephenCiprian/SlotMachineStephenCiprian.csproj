@@ -73,6 +73,7 @@
     <Content Include="assets\images\bet_max_button.png" />
     <Content Include="assets\images\bet_one_button.png" />
     <Content Include="assets\images\bet_ten_button.png" />
+    <Content Include="assets\images\blue.png" />
     <Content Include="assets\images\blueButton.png" />
     <Content Include="assets\images\power_button.png" />
     <Content Include="assets\images\reset_button.png" />
