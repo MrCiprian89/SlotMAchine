@@ -5,11 +5,16 @@ var stage: createjs.Stage;
 var game: createjs.Container;
 var background: createjs.Bitmap;
 var spinButton: createjs.Bitmap;
+var spinButton_disabled: createjs.Bitmap;
 var maxBetButton: createjs.Bitmap;
 var betTenButton: createjs.Bitmap;
 var betOneButton: createjs.Bitmap;
 var powerButton: createjs.Bitmap;
 var resetButton: createjs.Bitmap;
+
+var tiles: createjs.Bitmap[] = [];
+var tilesContainer: createjs.Container[] = [];
+var spinButtonContainer: createjs.Container;
 
 var blankReel: createjs.Bitmap;
 
@@ -25,7 +30,6 @@ var winnings = 0;
 var jackpot = 5000;
 var playerBet = 0;
 var spinResult;
-var fruits = "";
 var grapes = 0;
 var bananas = 0;
 var oranges = 0;
@@ -34,6 +38,7 @@ var bars = 0;
 var bells = 0;
 var sevens = 0;
 var blanks = 0;
+var win;
 
 
 function init() {
@@ -49,7 +54,6 @@ function gameLoop() {
     stage.update(); // Refreshes our stage
 }
 
-
 // Event handlers ###################################################3
 function spinButtonClick() {
      if (playerMoney == 0) {
@@ -59,30 +63,37 @@ function spinButtonClick() {
     }
     else if (playerBet <= playerMoney) {
         spinResult = Reels();
-        fruits = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
         determineWinnings();
-        showReelOutcome(spinResult);
+        showReelOutcome();
+        spinEnabled();
     }
-    creditsText.text = ""+playerMoney;
+    creditsText.text = "" + playerMoney;
+   
 }
 function maxBetButtonClick() {
     playerBet = 100;
-    betText.text = "" +playerBet;
+    betText.text = "" + playerBet;
+    spinEnabled();
 }
 function betOneButtonClick() {
     playerBet = 1;
-    betText.text = "" +playerBet;
+    betText.text = "" + playerBet;
+    spinEnabled();
 }
 function betTenButtonClick() {
     playerBet = 10;
-    betText.text = "" +playerBet;
+    betText.text = "" + playerBet;
+    spinEnabled();
 }
 function powerButtonClick() {
+    
+    window.open("", "_self").close();
 }
 function resetButtonClick() {
     resetFruitTally();
     resetAll();
 }
+
 //UTILITY##########################################################################
 
 /* Utility function to reset all fruit tallies */
@@ -108,6 +119,8 @@ function resetAll() {
     winText.text = "" +winnings;
     creditsText.text = "" +playerMoney;
 }
+
+//utility method to check if the player has won the jackpot
 function checkJackPot() {
     /* compare two random values */
     var jackPotTry = Math.floor(Math.random() * 51 + 1);
@@ -117,6 +130,15 @@ function checkJackPot() {
         playerMoney += jackpot;
         jackpot = 1000;
         jackpotText.text = "" + jackpot;
+    }
+}
+//Utility function to disable the spin button if the bet amount is more than the amount the player has to bet
+function spinEnabled() {
+    if (playerBet < playerMoney) {
+        spinButton_disabled.visible = false;
+    }
+    else {
+        spinButton_disabled.visible = true;
     }
 }
 /* Utility function to show a win message and increase player money */
@@ -155,31 +177,31 @@ function Reels() {
                 blanks++;
                 break;
             case checkRange(outCome[spin], 28, 37): // 15.4% probability
-                betLine[spin] = "Grapes";
+                betLine[spin] = "grapes";
                 grapes++;
                 break;
             case checkRange(outCome[spin], 38, 46): // 13.8% probability
-                betLine[spin] = "Banana";
+                betLine[spin] = "banana";
                 bananas++;
                 break;
             case checkRange(outCome[spin], 47, 54): // 12.3% probability
-                betLine[spin] = "Orange";
+                betLine[spin] = "orange";
                 oranges++;
                 break;
             case checkRange(outCome[spin], 55, 59): //  7.7% probability
-                betLine[spin] = "Cherry";
+                betLine[spin] = "cherry";
                 cherries++;
                 break;
             case checkRange(outCome[spin], 60, 62): //  4.6% probability
-                betLine[spin] = "Bar";
+                betLine[spin] = "bar";
                 bars++;
                 break;
             case checkRange(outCome[spin], 63, 64): //  3.1% probability
-                betLine[spin] = "Bell";
+                betLine[spin] = "bell";
                 bells++;
                 break;
             case checkRange(outCome[spin], 65, 65): //  1.5% probability
-                betLine[spin] = "Seven";
+                betLine[spin] = "seven";
                 sevens++;
                 break;
         }
@@ -187,31 +209,14 @@ function Reels() {
     return betLine;
 }
 
-function showReelOutcome(fruit) {
+function showReelOutcome() {
+    var tileX: number = 65;
     for (var reel = 0; reel < 3; reel++) {
-        switch (fruit[reel]) {
-            case "blank":
-                  blankReel = new createjs.Bitmap("assets/images/blue.png");
-                    game.addChild(blankReel);
-                    blankReel.x = 49.7;
-                    blankReel.y = 124;
-                break;
-            case "Grapes":
-                break;
-            case "Banana":
-                break;
-            case  "Orange":
-                break;
-            case "Cherry":
-                break;
-            case "Bar":
-                break;
-            case "Bell":
-                break;
-            case "Seven":
-                break;
-        }
-
+        tiles[reel] = new createjs.Bitmap("assets/images/" + spinResult[reel] + ".png");
+        console.log(tiles[reel]);
+        tiles[reel].x = tileX + (105 * reel);
+        tiles[reel].y = 155;
+        game.addChild(tiles[reel]);
     }
 }
 
@@ -282,9 +287,10 @@ function createUI() {
     game.addChild(background);
     //create spin button
     spinButton = new createjs.Bitmap("assets/images/spin_button.png");
-    game.addChild(spinButton);
-    spinButton.x = 308.7;
-    spinButton.y = 346.8;
+    spinButton_disabled = new createjs.Bitmap("assets/images/spin_button_disabled.png");
+    spinButtonContainer.addChild(spinButton, spinButton_disabled);
+    spinButtonContainer.x = 308.7;
+    spinButtonContainer.y = 346.8;
     spinButton.addEventListener("click", spinButtonClick);
     //create max bet button;
     maxBetButton = new createjs.Bitmap("assets/images/bet_max_button.png");
@@ -346,9 +352,12 @@ function createUI() {
 function main() {
     //Instantiate game container
     game = new createjs.Container();
+    //Instantiate spinButton Container
+    spinButtonContainer = new createjs.Container();
     //Create User interface
     createUI();
-    //Add the game container to the stage1
+    game.addChild(spinButtonContainer);
+    //Add the game container to the stage
     stage.addChild(game);
 }
 
