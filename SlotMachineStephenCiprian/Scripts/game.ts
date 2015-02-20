@@ -16,8 +16,6 @@ var tiles: createjs.Bitmap[] = [];
 var tilesContainer: createjs.Container[] = [];
 var spinButtonContainer: createjs.Container;
 
-var blankReel: createjs.Bitmap;
-
 var creditsText: createjs.Text;
 var betText: createjs.Text;
 var winText: createjs.Text;
@@ -30,14 +28,14 @@ var winnings = 0;
 var jackpot = 5000;
 var playerBet = 0;
 var spinResult;
-var grapes = 0;
-var bananas = 0;
-var oranges = 0;
-var cherries = 0;
-var bars = 0;
-var bells = 0;
-var sevens = 0;
-var blanks = 0;
+var vampire = 0;
+var lumpyspace_princess = 0;
+var bmo = 0;
+var jake = 0;
+var finn = 0;
+var bubblegum_princess = 0;
+var rainbow_unicorn = 0;
+var ice_king = 0;
 var win;
 
 
@@ -61,7 +59,7 @@ function spinButtonClick() {
             resetAll();
         }
     }
-    else if (playerBet <= playerMoney) {
+     else if (playerBet <= playerMoney && playerBet != 0) {
         spinResult = Reels();
         determineWinnings();
         showReelOutcome();
@@ -92,20 +90,29 @@ function powerButtonClick() {
 function resetButtonClick() {
     resetFruitTally();
     resetAll();
+    spinEnabled();
+}
+//returns the button to a solid colour when not hovered over
+function buttonOut(target: createjs.Bitmap) {
+    target.alpha = 1.0;
+}
+//makes the button transparent when hovered over
+function buttonOver(target: createjs.Bitmap) {
+    target.alpha = 0.5;
 }
 
-//UTILITY##########################################################################
+//UTILITY   METHODS ##########################################################################
 
 /* Utility function to reset all fruit tallies */
 function resetFruitTally() {
-    grapes = 0;
-    bananas = 0;
-    oranges = 0;
-    cherries = 0;
-    bars = 0;
-    bells = 0;
-    sevens = 0;
-    blanks = 0;
+    vampire = 0;
+    lumpyspace_princess = 0;
+    bmo = 0;
+    jake = 0;
+    finn = 0;
+    bubblegum_princess = 0;
+    rainbow_unicorn = 0;
+    ice_king = 0;
 }
 
 /* Utility function to reset the player stats */
@@ -134,25 +141,26 @@ function checkJackPot() {
 }
 //Utility function to disable the spin button if the bet amount is more than the amount the player has to bet
 function spinEnabled() {
-    if (playerBet < playerMoney) {
+    if (playerBet < playerMoney && playerBet !=0) {
         spinButton_disabled.visible = false;
     }
     else {
         spinButton_disabled.visible = true;
     }
 }
-/* Utility function to show a win message and increase player money */
+/* Utility function to check if jackpot was won and to increase player money by winnings */
 function showWinMessage() {
     playerMoney += winnings;
     resetFruitTally();
     checkJackPot();
     winText.text = "" +winnings;
 }
-/* Utility function to show a loss message and reduce player money */
+/* Utility function to and reduce player money and reset the tally*/
 function showLossMessage() {
     playerMoney -= playerBet;
     resetFruitTally();
 }
+
 /* Utility function to check if a value falls within a range of bounds */
 function checkRange(value, lowerBounds, upperBounds) {
     if (value >= lowerBounds && value <= upperBounds) {
@@ -163,8 +171,7 @@ function checkRange(value, lowerBounds, upperBounds) {
     }
 }
 
-/* When this function is called it determines the betLine results.
-e.g. Bar - Orange - Banana */
+/* When this function is called it determines the betLine results. */
 function Reels() {
     var betLine = [" ", " ", " "];
     var outCome = [0, 0, 0];
@@ -173,42 +180,43 @@ function Reels() {
         outCome[spin] = Math.floor((Math.random() * 65) + 1);
         switch (outCome[spin]) {
             case checkRange(outCome[spin], 1, 27):  // 41.5% probability
-                betLine[spin] = "blank";
-                blanks++;
+                betLine[spin] = "ice_king";
+                ice_king++;
                 break;
             case checkRange(outCome[spin], 28, 37): // 15.4% probability
-                betLine[spin] = "grapes";
-                grapes++;
+                betLine[spin] = "vampire";
+                vampire++;
                 break;
             case checkRange(outCome[spin], 38, 46): // 13.8% probability
-                betLine[spin] = "banana";
-                bananas++;
+                betLine[spin] = "lumpyspace_princess";
+                lumpyspace_princess++;
                 break;
             case checkRange(outCome[spin], 47, 54): // 12.3% probability
-                betLine[spin] = "orange";
-                oranges++;
+                betLine[spin] = "bmo";
+                bmo++;
                 break;
             case checkRange(outCome[spin], 55, 59): //  7.7% probability
-                betLine[spin] = "cherry";
-                cherries++;
+                betLine[spin] = "jake";
+                jake++;
                 break;
             case checkRange(outCome[spin], 60, 62): //  4.6% probability
-                betLine[spin] = "bar";
-                bars++;
+                betLine[spin] = "finn";
+                finn++;
                 break;
             case checkRange(outCome[spin], 63, 64): //  3.1% probability
-                betLine[spin] = "bell";
-                bells++;
+                betLine[spin] = "bubblegum_princess";
+                bubblegum_princess++;
                 break;
             case checkRange(outCome[spin], 65, 65): //  1.5% probability
-                betLine[spin] = "seven";
-                sevens++;
+                betLine[spin] = "rainbow_unicorn";
+                rainbow_unicorn++;
                 break;
         }
     }
     return betLine;
 }
 
+//function that displays pictures on reels based on the betline results
 function showReelOutcome() {
     var tileX: number = 65;
     for (var reel = 0; reel < 3; reel++) {
@@ -223,50 +231,50 @@ function showReelOutcome() {
 
 /* This function calculates the player's winnings, if any */
 function determineWinnings() {
-    if (blanks == 0) {
-        if (grapes == 3) {
+    if (ice_king == 0) {
+        if (vampire == 3) {
             winnings = playerBet * 10;
         }
-        else if (bananas == 3) {
+        else if (lumpyspace_princess == 3) {
             winnings = playerBet * 20;
         }
-        else if (oranges == 3) {
+        else if (bmo == 3) {
             winnings = playerBet * 30;
         }
-        else if (cherries == 3) {
+        else if (jake == 3) {
             winnings = playerBet * 40;
         }
-        else if (bars == 3) {
+        else if (finn == 3) {
             winnings = playerBet * 50;
         }
-        else if (bells == 3) {
+        else if (bubblegum_princess == 3) {
             winnings = playerBet * 75;
         }
-        else if (sevens == 3) {
+        else if (rainbow_unicorn == 3) {
             winnings = playerBet * 100;
         }
-        else if (grapes == 2) {
+        else if (vampire == 2) {
             winnings = playerBet * 2;
         }
-        else if (bananas == 2) {
+        else if (lumpyspace_princess == 2) {
             winnings = playerBet * 2;
         }
-        else if (oranges == 2) {
+        else if (bmo == 2) {
             winnings = playerBet * 3;
         }
-        else if (cherries == 2) {
+        else if (jake == 2) {
             winnings = playerBet * 4;
         }
-        else if (bars == 2) {
+        else if (finn == 2) {
             winnings = playerBet * 5;
         }
-        else if (bells == 2) {
+        else if (bubblegum_princess == 2) {
             winnings = playerBet * 10;
         }
-        else if (sevens == 2) {
+        else if (rainbow_unicorn == 2) {
             winnings = playerBet * 20;
         }
-        else if (sevens == 1) {
+        else if (rainbow_unicorn == 1) {
             winnings = playerBet * 5;
         }
         else {
@@ -292,36 +300,48 @@ function createUI() {
     spinButtonContainer.x = 308.7;
     spinButtonContainer.y = 346.8;
     spinButton.addEventListener("click", spinButtonClick);
+    spinButton.on("mouseover", function () { this.alpha = 0.5 });
+    spinButton.on("mouseout", function () { this.alpha = 1.0 });
     //create max bet button;
     maxBetButton = new createjs.Bitmap("assets/images/bet_max_button.png");
     game.addChild(maxBetButton);
     maxBetButton.x = 160.3;
     maxBetButton.y = 350.5;
     maxBetButton.addEventListener("click", maxBetButtonClick);
+    maxBetButton.on("mouseover", function () { this.alpha = 0.5 });
+    maxBetButton.on("mouseout", function () { this.alpha = 1.0 });
     //create bet one button
     betOneButton = new createjs.Bitmap("assets/images/bet_one_button.png");
     game.addChild(betOneButton);
     betOneButton.x = 118.5;
     betOneButton.y = 338;
     betOneButton.addEventListener("click", betOneButtonClick);
+    betOneButton.on("mouseover", function () {this.alpha = 0.5 });
+    betOneButton.on("mouseout", function () { this.alpha = 1.0 });
     //create bet ten button
     betTenButton = new createjs.Bitmap("assets/images/bet_ten_button.png");
     game.addChild(betTenButton);
     betTenButton.x = 118.4;
     betTenButton.y = 373.8;
     betTenButton.addEventListener("click", betTenButtonClick);
+    betTenButton.on("mouseover", function () { this.alpha = 0.5 });
+    betTenButton.on("mouseout", function () { this.alpha = 1.0 });
     //create power button
     powerButton = new createjs.Bitmap("assets/images/power_button.png");
     game.addChild(powerButton);
     powerButton.x = 36.5;
     powerButton.y = 338.5;
     powerButton.addEventListener("click", powerButtonClick);
+    powerButton.on("mouseover", function () { this.alpha = 0.5 });
+    powerButton.on("mouseout", function () { this.alpha = 1.0 });
     //create reset button
     resetButton = new createjs.Bitmap("assets/images/reset_button.png");
     game.addChild(resetButton);
     resetButton.x = 76.5;
     resetButton.y = 338.5;
     resetButton.addEventListener("click", resetButtonClick);
+    resetButton.on("mouseover", function () { this.alpha = 0.5 });
+    resetButton.on("mouseout", function () { this.alpha = 1.0 });
     //create winnings paid label
     winText = new createjs.Text("" +winnings, "20px Arial", "#ff7700");
     game.addChild(winText);
@@ -348,7 +368,7 @@ function createUI() {
     jackpotText.textBaseline = "alphabetic";
 }
 
-// Our Game Kicks off in here
+// Function that initializes the game
 function main() {
     //Instantiate game container
     game = new createjs.Container();
