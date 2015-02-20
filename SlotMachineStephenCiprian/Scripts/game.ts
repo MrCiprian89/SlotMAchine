@@ -52,7 +52,9 @@ function gameLoop() {
     stage.update(); // Refreshes our stage
 }
 
-// Event handlers ###################################################3
+// Event handlers ###################################################
+
+//When spin button is pressed checks to see if the player has any money, if they do it will play the game if the bet amount is less than the amount of money the player has if not the button will be disabled.
 function spinButtonClick() {
      if (playerMoney == 0) {
         if (confirm("You ran out of Money! \nDo you want to play again?")) {
@@ -68,6 +70,8 @@ function spinButtonClick() {
     creditsText.text = "" + playerMoney;
    
 }
+
+//buttons to select the amount to bet +++++++++++++
 function maxBetButtonClick() {
     playerBet = 100;
     betText.text = "" + playerBet;
@@ -83,22 +87,18 @@ function betTenButtonClick() {
     betText.text = "" + playerBet;
     spinEnabled();
 }
+
+//closes the current tab running the game when pressed
 function powerButtonClick() {
     
     window.open("", "_self").close();
 }
+
+//will reset all the game variables and disable the spin button until a bet amount is selected
 function resetButtonClick() {
     resetFruitTally();
     resetAll();
     spinEnabled();
-}
-//returns the button to a solid colour when not hovered over
-function buttonOut(target: createjs.Bitmap) {
-    target.alpha = 1.0;
-}
-//makes the button transparent when hovered over
-function buttonOver(target: createjs.Bitmap) {
-    target.alpha = 0.5;
 }
 
 //UTILITY   METHODS ##########################################################################
