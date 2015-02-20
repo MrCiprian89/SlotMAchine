@@ -65,7 +65,8 @@ function spinButtonClick() {
         spinResult = Reels();
         determineWinnings();
         showReelOutcome();
-        spinEnabled();
+         spinEnabled();
+         winText.text = "" + winnings;
     }
     creditsText.text = "" + playerMoney;
    
@@ -152,8 +153,7 @@ function spinEnabled() {
 function showWinMessage() {
     playerMoney += winnings;
     resetFruitTally();
-    checkJackPot();
-    winText.text = "" +winnings;
+    checkJackPot();   
 }
 /* Utility function to and reduce player money and reset the tally*/
 function showLossMessage() {
@@ -284,6 +284,7 @@ function determineWinnings() {
     }
     else {
         showLossMessage();
+        winnings = 0;
     }
 
 }
