@@ -1,4 +1,13 @@
-﻿var canvas;
+﻿/*
+    Title: Adventure timeslot machine web game
+    Author: Stephen Ciprian
+    Last modified: Feb 20, 2015
+    Description: A web game that mimics a casino slot machine
+    Version: 2.0.0
+*/
+
+
+var canvas;
 var stage: createjs.Stage;
 
 // Game Objects 
@@ -13,7 +22,6 @@ var powerButton: createjs.Bitmap;
 var resetButton: createjs.Bitmap;
 
 var tiles: createjs.Bitmap[] = [];
-var tilesContainer: createjs.Container[] = [];
 var spinButtonContainer: createjs.Container;
 
 var creditsText: createjs.Text;
